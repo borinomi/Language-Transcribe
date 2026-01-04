@@ -23,22 +23,24 @@ echo.
 
 rem 원본 언어 선택
 echo 원본 언어를 선택하세요:
-echo   1. 일본어 (ja)
-echo   2. 영어 (en)
-echo   3. 한국어 (ko)
-echo   4. 중국어 (zh)
-echo   5. 스페인어 (es)
-echo   6. 프랑스어 (fr)
+echo   1. 영어 (en)
+echo   2. 일본어 (ja)
+echo   3. 베트남어 (vi)
+echo   4. 한국어 (ko)
+echo   5. 중국어 (zh)
+echo   6. 스페인어 (es)
+echo   7. 프랑스어 (fr)
 echo.
 set /p SOURCE_CHOICE="번호 선택 (기본: 1): "
 
 if "%SOURCE_CHOICE%"=="" set SOURCE_CHOICE=1
-if "%SOURCE_CHOICE%"=="1" set SOURCE_LANG=ja
-if "%SOURCE_CHOICE%"=="2" set SOURCE_LANG=en
-if "%SOURCE_CHOICE%"=="3" set SOURCE_LANG=ko
-if "%SOURCE_CHOICE%"=="4" set SOURCE_LANG=zh
-if "%SOURCE_CHOICE%"=="5" set SOURCE_LANG=es
-if "%SOURCE_CHOICE%"=="6" set SOURCE_LANG=fr
+if "%SOURCE_CHOICE%"=="1" set SOURCE_LANG=en
+if "%SOURCE_CHOICE%"=="2" set SOURCE_LANG=ja
+if "%SOURCE_CHOICE%"=="3" set SOURCE_LANG=vi
+if "%SOURCE_CHOICE%"=="4" set SOURCE_LANG=ko
+if "%SOURCE_CHOICE%"=="5" set SOURCE_LANG=zh
+if "%SOURCE_CHOICE%"=="6" set SOURCE_LANG=es
+if "%SOURCE_CHOICE%"=="7" set SOURCE_LANG=fr
 
 if not defined SOURCE_LANG (
     echo [ERROR] 잘못된 선택입니다.
@@ -48,27 +50,23 @@ if not defined SOURCE_LANG (
 
 echo.
 rem 번역 언어 선택
-echo 번역할 언어를 선택하세요:
-echo   1. 한국어 (ko)
-echo   2. 영어 (en)
-echo   3. 일본어 (ja)
-echo   4. 중국어 (zh)
-echo   5. 스페인어 (es)
-echo   6. 프랑스어 (fr)
-echo   7. 번역 안함 (원본만)
+echo 자막 형식을 선택하세요:
+echo   1. 받아쓰기 (원본만)
+echo   2. 한국어 번역 (원본 + 한국어)
 echo.
 set /p DEST_CHOICE="번호 선택 (기본: 1): "
 
 if "%DEST_CHOICE%"=="" set DEST_CHOICE=1
-if "%DEST_CHOICE%"=="1" set DEST_LANG=ko
-if "%DEST_CHOICE%"=="2" set DEST_LANG=en
-if "%DEST_CHOICE%"=="3" set DEST_LANG=ja
-if "%DEST_CHOICE%"=="4" set DEST_LANG=zh
-if "%DEST_CHOICE%"=="5" set DEST_LANG=es
-if "%DEST_CHOICE%"=="6" set DEST_LANG=fr
-if "%DEST_CHOICE%"=="7" set NO_TRANSLATE=--no-translate
+if "%DEST_CHOICE%"=="1" (
+    set DEST_LANG=ko
+    set NO_TRANSLATE=--no-translate
+)
+if "%DEST_CHOICE%"=="2" (
+    set DEST_LANG=ko
+    set NO_TRANSLATE=
+)
 
-if not defined DEST_LANG if not defined NO_TRANSLATE (
+if not defined DEST_LANG (
     echo [ERROR] 잘못된 선택입니다.
     pause
     exit /b 1
@@ -76,8 +74,12 @@ if not defined DEST_LANG if not defined NO_TRANSLATE (
 
 echo.
 echo ======================================
-echo 선택된 언어: %SOURCE_LANG% -^> %DEST_LANG%
-if defined NO_TRANSLATE echo 번역: 안함
+echo 원본 언어: %SOURCE_LANG%
+if defined NO_TRANSLATE (
+    echo 자막 형식: 받아쓰기 ^(원본만^)
+) else (
+    echo 자막 형식: 한국어 번역 ^(원본 + 한국어^)
+)
 echo ======================================
 echo.
 
