@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 >nul
 set SCRIPT_DIR=%~dp0
-cd /d "%SCRIPT_DIR%"
+cd /d C:\Users\Anhmake\OneDrive\문서\code\LanguageReactor
 
 if "%~1"=="" (
     echo 사용법: 파일을 이 bat 파일로 드래그앤드롭하세요.
@@ -95,8 +95,8 @@ goto AUDIO
 
 :VIDEO
 echo [INFO] 비디오 파일 감지 - 오디오 추출중...
-set AUDIO_FILE=%FILE_DIR%%FILE_NAME%.mp3
-"C:\ffmpeg\bin\ffmpeg.exe" -i "%INPUT_FILE%" -vn -y "%AUDIO_FILE%"
+set AUDIO_FILE=%FILE_DIR%%FILE_NAME%.ogg
+"C:\ffmpeg\bin\ffmpeg.exe" -i "%INPUT_FILE%" -vn -ac 1 -ar 16000 -af "aresample=async=1:first_pts=0" -c:a libopus -b:a 32k -y "%AUDIO_FILE%"
 if errorlevel 1 (
     echo [ERROR] 오디오 추출 실패
     pause
