@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 >nul
-set SCRIPT_DIR=%~dp0
-cd /d C:\Users\Anhmake\OneDrive\문서\code\LanguageReactor
+set SCRIPT_DIR=C:\Users\Anhmake\OneDrive\문서\code\LanguageReactor\
+cd /d "%SCRIPT_DIR%"
 
 if "%~1"=="" (
     echo 사용법: 파일을 이 bat 파일로 드래그앤드롭하세요.
@@ -53,6 +53,12 @@ rem 번역 언어 선택
 echo 자막 형식을 선택하세요:
 echo   1. 받아쓰기 (원본만)
 echo   2. 한국어 번역 (원본 + 한국어)
+echo   3. 영어 (en)
+echo   4. 일본어 (ja)
+echo   5. 베트남어 (vi)
+echo   6. 중국어 (zh)
+echo   7. 스페인어 (es)
+echo   8. 프랑스어 (fr)
 echo.
 set /p DEST_CHOICE="번호 선택 (기본: 1): "
 
@@ -60,16 +66,59 @@ if "%DEST_CHOICE%"=="" set DEST_CHOICE=1
 if "%DEST_CHOICE%"=="1" (
     set DEST_LANG=ko
     set NO_TRANSLATE=--no-translate
+    set MODE=orig
 )
 if "%DEST_CHOICE%"=="2" (
     set DEST_LANG=ko
     set NO_TRANSLATE=
+    set MODE=dual
+)
+if "%DEST_CHOICE%"=="3" (
+    set DEST_LANG=en
+    set NO_TRANSLATE=
+    set MODE=trans
+)
+if "%DEST_CHOICE%"=="4" (
+    set DEST_LANG=ja
+    set NO_TRANSLATE=
+    set MODE=trans
+)
+if "%DEST_CHOICE%"=="5" (
+    set DEST_LANG=vi
+    set NO_TRANSLATE=
+    set MODE=trans
+)
+if "%DEST_CHOICE%"=="6" (
+    set DEST_LANG=zh
+    set NO_TRANSLATE=
+    set MODE=trans
+)
+if "%DEST_CHOICE%"=="7" (
+    set DEST_LANG=es
+    set NO_TRANSLATE=
+    set MODE=trans
+)
+if "%DEST_CHOICE%"=="8" (
+    set DEST_LANG=fr
+    set NO_TRANSLATE=
+    set MODE=trans
 )
 
 if not defined DEST_LANG (
     echo [ERROR] 잘못된 선택입니다.
     pause
     exit /b 1
+)
+
+echo.
+echo 기존 자막이 있습니까?
+echo   1. 없음 (음성 인식)
+echo   2. 있음 (기존 SRT 번역)
+set /p SUB_CHOICE="번호 선택 (기본: 1): "
+
+if "%SUB_CHOICE%"=="" set SUB_CHOICE=1
+if "%SUB_CHOICE%"=="2" (
+    set USE_EXTERNAL_SRT=--external-srt
 )
 
 echo.
@@ -102,11 +151,11 @@ if errorlevel 1 (
     pause
     exit /b 1
 )
-python "%SCRIPT_DIR%main.py" "%AUDIO_FILE%" --source %SOURCE_LANG% --dest %DEST_LANG% %NO_TRANSLATE% --temp-audio
+python "%SCRIPT_DIR%main.py" "%AUDIO_FILE%" --source %SOURCE_LANG% --dest %DEST_LANG% %NO_TRANSLATE% --subtitle-mode %MODE% %USE_EXTERNAL_SRT% --temp-audio
 goto END
 
 :AUDIO
-python "%SCRIPT_DIR%main.py" "%INPUT_FILE%" --source %SOURCE_LANG% --dest %DEST_LANG% %NO_TRANSLATE%
+python "%SCRIPT_DIR%main.py" "%INPUT_FILE%" --source %SOURCE_LANG% --dest %DEST_LANG% %NO_TRANSLATE% --subtitle-mode %MODE% %USE_EXTERNAL_SRT%
 goto END
 
 :END
