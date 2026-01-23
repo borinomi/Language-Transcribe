@@ -1,0 +1,11 @@
+services:
+  srt-translator-api:
+    build: .
+    container_name: srt-translator-api
+    ports:
+      - "8013:8013"
+    volumes:
+      - C:/n8n/download:/workspace
+    restart: always
+    environment:
+      - PYTHONUNBUFFERED=1
